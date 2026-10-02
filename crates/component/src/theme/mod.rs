@@ -20,6 +20,7 @@ use std::{
 };
 
 mod color;
+mod font_policy;
 mod mono_font;
 mod motion;
 mod registry;
@@ -28,6 +29,7 @@ mod system_font;
 mod theme_color;
 
 pub use color::*;
+pub use font_policy::{FontEnumerationObserver, ThemeFonts};
 pub use motion::*;
 pub use registry::*;
 pub use schema::*;
@@ -306,7 +308,7 @@ impl Theme {
         }
         let fonts_changed =
             (&theme.font_family, &theme.mono_font_family) != (&fonts_before.0, &fonts_before.1);
-        if mode_changed || reload_mode || fonts_changed {
+        if !font_policy::apply(cx) && (mode_changed || reload_mode || fonts_changed) {
             system_font::resolve_default_font(cx);
             mono_font::resolve_default_mono_font(cx);
         }
@@ -451,6 +453,7 @@ impl Theme {
     /// It rebuilds the Base theme from scratch, so any style written straight
     /// onto the Base global is replaced. It does not touch [`Theme::tokens`].
     pub fn sync_base(cx: &mut App) {
+        font_policy::apply(cx);
         let theme = Theme::global(cx).clone();
         let base_theme = theme.base_theme();
         cx.set_global(base_theme);

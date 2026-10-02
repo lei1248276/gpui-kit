@@ -146,6 +146,13 @@ pub fn init(cx: &mut App) {
     tooltip::init(cx);
 }
 
+/// Run the complete initialization with application-verified font families.
+/// The policy remains scoped to this App for subsequent theme updates.
+pub fn init_with_fonts(cx: &mut App, fonts: theme::ThemeFonts) {
+    cx.set_global(fonts);
+    init(cx);
+}
+
 #[inline]
 pub fn locale() -> impl Deref<Target = str> {
     rust_i18n::locale()

@@ -68,7 +68,12 @@ fn installed_default_mono_font_family(cx: &App) -> SharedString {
 /// process runs.
 pub(super) fn installed_font_names(cx: &App) -> &'static [String] {
     static NAMES: OnceLock<Vec<String>> = OnceLock::new();
-    NAMES.get_or_init(|| cx.text_system().all_font_names())
+    NAMES.get_or_init(|| {
+        let started = std::time::Instant::now();
+        let names = cx.text_system().all_font_names();
+        super::font_policy::record_enumeration(cx, started.elapsed());
+        names
+    })
 }
 
 /// `default` when it is installed, else the first installed alternate, else

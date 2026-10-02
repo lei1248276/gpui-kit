@@ -100,9 +100,9 @@ regex = "1"
 anyhow.workspace = true
 gpui = { workspace = true }
 gpui_macros.workspace = true
-gpui-base.workspace = true
-gpui-component-macros = { workspace = true }
-gpui-kit-assets = { workspace = true }
+gpui-base = "=0.7.0"
+gpui-component-macros = "=0.7.0"
+gpui-kit-assets = "=0.7.0"
 notify.workspace = true
 ropey.workspace = true
 rust-i18n.workspace = true
